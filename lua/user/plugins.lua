@@ -1,38 +1,55 @@
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git", "clone", "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
+-- plugins.lua
+return {
+  -- Lazy.nvim manager itself
+  {
+    "folke/lazy.nvim",
+    version = "*",
+  },
 
-require("lazy").setup({
+  -- Colorschemes
+  {
+    "Shatur/neovim-ayu",
+    lazy = false,
+    priority = 1000, -- load early
+  },
+  {
+    "sainnhe/everforest",
+    lazy = false,
+  },
+  {
+    "rebelot/kanagawa.nvim",
+    lazy = false,
+  },
 
-  { "tpope/vim-fugitive" },
-
-  -- UI & theme
-  { "nvim-lualine/lualine.nvim" },
+  -- Treesitter for better syntax highlighting
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    -- load early-ish because we want highlighting available
-    event = { "BufReadPre", "BufNewFile" },
-    opts = {
-      ensure_installed = { "javascript", "typescript", "tsx", "c", "cpp", "lua", "json", "html", "css" },
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-      },
-      indent = {
-        enable = false,
-        disable = { "python" },
-      },
-      -- optional extras can be configured here if you like
-      -- e.g. incremental_selection = { enable = true }, textobjects = { ... }
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      "nvim-treesitter/playground",
     },
-    -- when using Lazy with opts, call setup in config
+    opts = {
+      ensure_installed = { "javascript", "typescript", "cpp", "lua", "html", "css", "json" },
+      highlight = { enable = true, additional_vim_regex_highlighting = false },
+      indent = { enable = false },
+      rainbow = {
+        enable = true,
+        extended_mode = true,
+        max_file_lines = 1000,
+      },
+      textobjects = {
+        select = {
+          enable = true,
+          keymaps = {
+            ["af"] = "@function.outer",
+            ["if"] = "@function.inner",
+            ["ac"] = "@class.outer",
+            ["ic"] = "@class.inner",
+          },
+        },
+      },
+    },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
     end,
@@ -45,58 +62,95 @@ require("lazy").setup({
     config = function(_, opts) require("hlargs").setup(opts) end,
   },
 
-  -- fzf
-  { "ibhagwan/fzf-lua", opts = {}},
-  --
-  -- Colorscheme
-  -- { "ayu-theme/ayu-vim" },
-  { "Shatur/neovim-ayu" },
-
-  { -- Set lualine as statusline
-    'nvim-lualine/lualine.nvim',
-    -- See `:help lualine.txt`
-    opts = {
-      options = {
-        icons_enabled = false,
-        theme = 'ayu',
-        component_separators = '|',
-        section_separators = '',
-      },
-    },
-  },
-
-  {  'thaerkh/vim-workspace' },
-
-  { 'mason-org/mason.nvim', opts = {} },
+  -- LSP Configs
   {
-    'mason-org/mason-lspconfig.nvim',
-    opts = {
-      ensure_installed = { 'vimls', 'ts_ls', 'lua_ls', },
-    },
+    "neovim/nvim-lspconfig",
     dependencies = {
-      { 'mason-org/mason.nvim', opts = {} },
-      'neovim/nvim-lspconfig'
+      { "mason-org/mason.nvim", opts = {} },
+      {
+        "mason-org/mason-lspconfig.nvim",
+        opts = {
+          ensure_installed = { 'vimls', 'ts_ls', 'lua_ls', 'eslint' }
+        }
+      },
+      -- "jose-elias-alvarez/null-ls.nvim",
+      -- "jose-elias-alvarez/typescript.nvim",
+    },
+    config = function()
+      require("user.lsp")
+    end,
+  },
+
+  -- Autocompletion
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
+    },
+    config = function()
+      local cmp = require("cmp")
+      cmp.setup({
+        snippet = {
+          expand = function() end
+        },
+        mapping = cmp.mapping.preset.insert({
+          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+          ["<C-f>"] = cmp.mapping.scroll_docs(4),
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<C-e>"] = cmp.mapping.abort(),
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        }),
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+        }, {
+          { name = "buffer" },
+        }),
+      })
+    end,
+  },
+
+  -- FZF integration
+  {
+    "ibhagwan/fzf-lua",
+    -- dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+      winopts = {
+        height = 0.40,  -- bottom 40%
+        width  = 1.0,
+        row    = 1.0,   -- place at bottom
+        col    = 0.5,
+        border = "none",
+      },
+      fzf_opts = {
+        ["--layout"] = "reverse",
+        ["--info"]   = "inline",
+      },
+      preview = { default = "bat" },
+      files = {
+        rg_opts = "--hidden --glob '!.git/*' --follow",
+        file_icons = false, --true,
+      },
+      git = { files = { cmd = "git ls-files --exclude-standard" } },
     },
   },
-  -- Autopairs for (), {}, [] and xml-tags
+
+  -- Closing tags, parentheses, and rainbow
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
-    config = function()
-      require("nvim-autopairs").setup()
-    end,
+    opts = {},
   },
   {
     "windwp/nvim-ts-autotag",
     event = "InsertEnter",
-    config = function()
-      require("nvim-ts-autotag").setup()
-    end,
+    opts = {},
   },
-
   {
     "HiPhish/rainbow-delimiters.nvim",
-    event = "VeryLazy",
+    event = "BufReadPost",
     config = function()
       local rainbow = require("rainbow-delimiters")
       vim.g.rainbow_delimiters = {
@@ -113,39 +167,25 @@ require("lazy").setup({
     end,
   },
 
-  -- autocompletion
+  -- Statusline
   {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
+    "nvim-lualine/lualine.nvim",
+    -- dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+      options = {
+        icons_enabled = false,
+        theme = 'ayu',
+        component_separators = '|',
+        section_separators = '',
+      },
     },
-    config = function()
-      local cmp = require("cmp")
+  },
 
-      cmp.setup({
-        snippet = { expand = function() end }, -- no snippets
+  -- Vim workspace management
+  {
+    "thaerkh/vim-workspace",
+  },
 
-        completion = { autocomplete = { cmp.TriggerEvent.TextChanged } },
-
-        mapping = cmp.mapping.preset.insert({
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        }),
-
-        sources = {
-          { name = "nvim_lsp" },
-          { name = "buffer" },
-        },
-      })
-
-      -- Add LSP completion capability
-      local caps = require("cmp_nvim_lsp").default_capabilities()
-      vim.lsp.config("eslint", {
-        cmd = { "node_modules/.bin/eslint-language-server", "--stdio" },
-        capabilities = caps,
-      })
-    end,
-  }
-
-
-})
+  --  Git
+  { "tpope/vim-fugitive" },
+}

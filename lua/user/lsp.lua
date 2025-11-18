@@ -1,4 +1,6 @@
-vim.lsp.config('lua_ls', {
+local caps = require("cmp_nvim_lsp").default_capabilities()
+local lspconfig = vim.lsp.config
+lspconfig('lua_ls', {
 	settings = {
 		Lua = {
 			runtime = {
@@ -17,8 +19,9 @@ vim.lsp.config('lua_ls', {
 	},
 })
 
-vim.lsp.config("eslint", {
-  cmd = { vim.fn.getcwd() .. "/node_modules/.bin/eslint-language-server", "--stdio" },
+lspconfig("eslint", {
+  cmd = { vim.fn.getcwd() .. "node_modules/.bin/eslint-language-server", "--stdio" },
+  capabilities = caps,
   filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "svelte" },
   root_markers = { ".eslintrc", ".eslintrc.json", ".eslintrc.js", "package.json" },
   settings = {
@@ -28,5 +31,9 @@ vim.lsp.config("eslint", {
       codeActionOnSave = { enable = false, mode = "all" },
       format = false,
     },
+    packageManager = "yarn",
   },
 })
+
+
+lspconfig("clangd", {})
