@@ -26,7 +26,7 @@ require("lazy").setup({
         additional_vim_regex_highlighting = false,
       },
       indent = {
-        enable = true,
+        enable = false,
         disable = { "python" },
       },
       -- optional extras can be configured here if you like
@@ -45,43 +45,9 @@ require("lazy").setup({
     config = function(_, opts) require("hlargs").setup(opts) end,
   },
 
-  {
-    "p00f/nvim-ts-rainbow",
-    event = { "BufReadPost", "BufNewFile" },
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-  },
-
   -- fzf
   { "ibhagwan/fzf-lua", opts = {}},
-
-  -- LSP & completion
-  { -- LSP Configuration & Plugins
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      -- Automatically install LSPs to stdpath for neovim
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
-
-      -- Useful status updates for LSP
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
-
-      -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
-    },
-  },
-
-  {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "L3MON4D3/LuaSnip",
-      "saadparwaiz1/cmp_luasnip",
-    },
-  },
-
+  --
   -- Colorscheme
   -- { "ayu-theme/ayu-vim" },
   { "Shatur/neovim-ayu" },
@@ -100,4 +66,86 @@ require("lazy").setup({
   },
 
   {  'thaerkh/vim-workspace' },
+
+  { 'mason-org/mason.nvim', opts = {} },
+  {
+    'mason-org/mason-lspconfig.nvim',
+    opts = {
+      ensure_installed = { 'vimls', 'ts_ls', 'lua_ls', },
+    },
+    dependencies = {
+      { 'mason-org/mason.nvim', opts = {} },
+      'neovim/nvim-lspconfig'
+    },
+  },
+  -- Autopairs for (), {}, [] and xml-tags
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = function()
+      require("nvim-autopairs").setup()
+    end,
+  },
+  {
+    "windwp/nvim-ts-autotag",
+    event = "InsertEnter",
+    config = function()
+      require("nvim-ts-autotag").setup()
+    end,
+  },
+
+  {
+    "HiPhish/rainbow-delimiters.nvim",
+    event = "VeryLazy",
+    config = function()
+      local rainbow = require("rainbow-delimiters")
+      vim.g.rainbow_delimiters = {
+        strategy = {
+          [""] = rainbow.strategy["global"],
+        },
+        query = {
+          [""] = "rainbow-delimiters",
+        },
+        priority = {
+          [""] = 110,
+        },
+      }
+    end,
+  },
+
+  -- autocompletion
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+    },
+    config = function()
+      local cmp = require("cmp")
+
+      cmp.setup({
+        snippet = { expand = function() end }, -- no snippets
+
+        completion = { autocomplete = { cmp.TriggerEvent.TextChanged } },
+
+        mapping = cmp.mapping.preset.insert({
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        }),
+
+        sources = {
+          { name = "nvim_lsp" },
+          { name = "buffer" },
+        },
+      })
+
+      -- Add LSP completion capability
+      local caps = require("cmp_nvim_lsp").default_capabilities()
+      vim.lsp.config("eslint", {
+        cmd = { "node_modules/.bin/eslint-language-server", "--stdio" },
+        capabilities = caps,
+      })
+    end,
+  }
+
+
 })

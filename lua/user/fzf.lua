@@ -30,7 +30,7 @@ vim.keymap.set("n", "<leader>h", function() fzf.oldfiles() end, vim.tbl_extend("
 vim.keymap.set("n", "<leader>H", function() fzf.cmd_history() end, vim.tbl_extend("force", map_opts, { desc = "FZF: Command history" }))
 
 -- Visual-mode: grep for the selected text (press <leader>g in visual to search selection)
-vim.keymap.set("v", "<leader>g", function()
+vim.keymap.set("n", "<leader>g", function()
   -- grab selected text (raw)
   local old_reg = vim.fn.getreg('"')
   -- yank selection into unnamed register (preserves user's registers)
