@@ -18,6 +18,8 @@ opt.ignorecase = true
 opt.smartcase = true
 opt.updatetime = 250
 vim.o.mouse = ""
+opt.startofline = false
+vim.o.equalalways = true
 
 opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"

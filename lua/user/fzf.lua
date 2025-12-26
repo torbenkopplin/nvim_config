@@ -14,6 +14,7 @@ fzf.setup({
   fzf_opts = {
     ["--layout"] = "reverse",
     ["--info"]   = "inline",
+    ["--history"] = vim.fn.stdpath("data") .. "/fzf-history",
   },
   preview = { default = "bat" },
 })
