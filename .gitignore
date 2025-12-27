@@ -1,3 +1,3 @@
-.undodir/*
-Sessions.vim
+.undodir/
+Session.vim
 lazy-lock.json
