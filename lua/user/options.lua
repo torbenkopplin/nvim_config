@@ -21,12 +21,6 @@ vim.o.mouse = ""
 opt.startofline = false
 vim.o.equalalways = true
 
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
-opt.foldlevel = 99
-
-vim.wo.foldmethod = 'expr'
-vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 
 -- Keeping it until I have decided if the plugin is significantly better.
 -- -- Basic popup behaviour
