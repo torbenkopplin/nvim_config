@@ -30,7 +30,7 @@ return {
       "nvim-treesitter/playground",
     },
     opts = {
-      ensure_installed = { "javascript", "typescript", "cpp", "lua", "html", "css", "json" },
+      ensure_installed = { "javascript", "typescript", "jsdoc", "cpp", "lua", "html", "css", "json" },
       highlight = { enable = true, additional_vim_regex_highlighting = false },
       indent = { enable = false },
       rainbow = {
