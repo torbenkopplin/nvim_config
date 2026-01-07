@@ -1,8 +1,8 @@
 -- use your colorscheme first:
-vim.cmd("colorscheme ayu")
+vim.cmd("colorscheme kanagawa-wave")
 vim.opt.termguicolors = true
 
-require('ayu').setup({
+require('kanagawa').setup({
   mirage = false,
   terminal = true,
   overrides = {
