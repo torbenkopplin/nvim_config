@@ -26,6 +26,8 @@ keymap('n', 'gj', 'j')
 keymap('n', 'k', 'gk')
 keymap('n', 'gk', 'k')
 
+keymap('n', '-', '/')
+
 vim.api.nvim_create_autocmd("FileType", {
   callback = function(args)
     local ft = vim.bo[args.buf].filetype
@@ -48,3 +50,26 @@ vim.api.nvim_create_autocmd("FileType", {
     end
   end
 })
+
+local function insert_blank_lines(dir)
+  local count = vim.v.count1
+  local pos = vim.api.nvim_win_get_cursor(0)
+  local row = pos[1] - dir
+  local col = pos[2]
+  local newrowpos = pos[1] + ( count * dir )
+
+  local lines = {}
+  for _ = 1, count do
+    table.insert(lines, "")
+  end
+  vim.api.nvim_buf_set_lines(0, row, row, false, lines)
+  vim.api.nvim_win_set_cursor(0, {newrowpos, col})
+end
+
+keymap('n', '<C-j>', function()
+  insert_blank_lines(0)
+end, { desc = "Insert blank lines below."})
+
+keymap('n', '<C->', function()
+  insert_blank_lines(1)
+end, { desc = "Insert blank lines above."})
