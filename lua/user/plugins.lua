@@ -129,8 +129,12 @@ return {
         ["--info"]   = "inline",
       },
       preview = { default = "bat" },
+      file_ignore_patterns = {
+        "%.undodir",
+      },
       files = {
-        rg_opts = "--hidden --glob '!.git/*' --follow",
+        rg_opts = "--hidden --glob '!.git/*' --glob '**.undodir/**' --follow",
+        fd_opts = "--exclude .undodir",
         file_icons = false, --true,
       },
       git = { files = { cmd = "git ls-files --exclude-standard" } },
