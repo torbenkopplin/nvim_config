@@ -32,20 +32,7 @@ vim.keymap.set("n", "<leader>H", function() fzf.cmd_history() end, vim.tbl_exten
 
 -- Visual-mode: grep for the selected text (press <leader>g in visual to search selection)
 vim.keymap.set("n", "<leader>g", function()
-  -- grab selected text (raw)
-  local old_reg = vim.fn.getreg('"')
-  -- yank selection into unnamed register (preserves user's registers)
-  vim.cmd('""y')  -- yank selection to unnamed register
-  local selection = vim.fn.getreg('"')
-  -- restore old register
-  vim.fn.setreg('"', old_reg)
-  -- trim newlines
-  selection = selection:gsub("\n", " "):gsub("^%s+", ""):gsub("%s+$", "")
-  if selection == "" then
-    vim.notify("No selection to search", vim.log.levels.WARN)
-    return
-  end
-  fzf.live_grep({ search = selection })
+  fzf.live_grep({ search = vim.fn.expand("<cword>") })
 end, vim.tbl_extend("force", map_opts, { desc = "FZF: Live grep (visual selection)" }))
 
 -- Multi-select: open multiple files in tabs (call with <leader>F)
