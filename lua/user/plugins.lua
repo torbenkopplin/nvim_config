@@ -115,7 +115,7 @@ return {
   -- FZF integration
   {
     "ibhagwan/fzf-lua",
-    -- dependencies = { "nvim-tree/nvim-web-devicons" },
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = {
       winopts = {
         height = 0.40,  -- bottom 40%
