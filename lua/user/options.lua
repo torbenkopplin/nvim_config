@@ -20,6 +20,7 @@ opt.updatetime = 250
 vim.o.mouse = ""
 opt.startofline = false
 vim.o.equalalways = true
+opt.laststatus = 3
 
 -- Workspace options
 vim.opt.undofile = true

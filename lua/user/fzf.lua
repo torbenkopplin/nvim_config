@@ -9,7 +9,7 @@ fzf.setup({
     width  = 1.0,
     row    = 1.0,   -- place at bottom
     col    = 0.5,
-    border = "none",
+    border = 1,
   },
   fzf_opts = {
     ["--layout"] = "reverse",

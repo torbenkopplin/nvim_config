@@ -16,6 +16,7 @@ keymap('n', 'åd', '[d')
 
 
 keymap('n', 'gd', vim.lsp.buf.definition)
+keymap('n', '<CR>', vim.lsp.buf.definition)
 keymap('n', 'gr', vim.lsp.buf.references)
 
 keymap('n', '`', "'")
@@ -70,7 +71,7 @@ keymap('n', '<C-j>', function()
   insert_blank_lines(0)
 end, { desc = "Insert blank lines below."})
 
-keymap('n', '<C->', function()
+keymap('n', '<C-k>', function()
   insert_blank_lines(1)
 end, { desc = "Insert blank lines above."})
 
