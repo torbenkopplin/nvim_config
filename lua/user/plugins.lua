@@ -227,4 +227,22 @@ return {
       hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
     end
   },
+
+  {
+    "hedyhli/outline.nvim",
+    lazy = true,
+    cmd = { "Outline", "OutlineOpen" },
+    keys = {
+      { "<leader>o", "<cmd>Outline<CR>", desc = "Toggle outline", },
+    },
+    opts = {
+      keymaps = {
+        close = { '<Esc>', 'q' },
+        goto_and_close = '<CR>',
+        peek_location = 'o',
+        hover_symbol = 'K',
+      },
+    },
+    config = function(_, opts) require("outline").setup(opts) end,
+  },
 }

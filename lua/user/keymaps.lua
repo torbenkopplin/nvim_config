@@ -14,10 +14,14 @@ keymap('n', 'å', '[')
 keymap('n', 'äd', ']d')
 keymap('n', 'åd', '[d')
 
+-- LSP diagnostics maps
+keymap('n', '<C-ä>', function() vim.diagnostic.jump({count = 1, }) end)
+keymap('n', '<C-å>', function() vim.diagnostic.jump({count = -1, }) end)
 
-keymap('n', 'gd', vim.lsp.buf.definition)
-keymap('n', '<CR>', vim.lsp.buf.definition)
-keymap('n', 'gr', vim.lsp.buf.references)
+keymap('n', '<leader>e', function() vim.diagnostic.open_float() end)
+
+keymap('n', '<leader>r', vim.lsp.buf.references)
+keymap('n', '<leader>d', vim.lsp.buf.definition)
 
 keymap('n', '`', "'")
 keymap('n', "'", '`')
@@ -29,28 +33,6 @@ keymap('n', 'gk', 'k')
 
 keymap('n', '-', '/')
 
-vim.api.nvim_create_autocmd("FileType", {
-  callback = function(args)
-    local ft = vim.bo[args.buf].filetype
-
-    vim.opt.foldmethod = 'manual'
-    vim.wo.foldmethod = 'manual'
-    if ft == "javascript" then
-      keymap('n', 'zxi', 'viBkzf')
-      keymap('n', 'zxa', 'viBokzf')
-    elseif ft == 'xml' then
-      keymap('n', 'zxi', 'vitkojzf')
-      keymap('n', 'zxa', 'vatzf')
-    else
-      vim.opt.foldmethod = 'expr'
-      vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-      vim.opt.foldlevel = 99
-
-      vim.wo.foldmethod = 'expr'
-      vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-    end
-  end
-})
 
 local function insert_blank_lines(dir)
   local count = vim.v.count1

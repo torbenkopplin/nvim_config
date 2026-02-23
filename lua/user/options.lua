@@ -22,6 +22,8 @@ opt.startofline = false
 vim.o.equalalways = true
 opt.laststatus = 3
 
+vim.o.winborder = "rounded"
+
 -- Workspace options
 vim.opt.undofile = true
 vim.g.workspace_autocreate = 1
