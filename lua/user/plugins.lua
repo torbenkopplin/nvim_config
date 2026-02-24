@@ -50,9 +50,7 @@ return {
         },
       },
     },
-    config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
-    end,
+    config = function(_, opts) require("nvim-treesitter").setup(opts) end,
   },
   {
     "m-demare/hlargs.nvim",
@@ -76,9 +74,7 @@ return {
       -- "jose-elias-alvarez/null-ls.nvim",
       -- "jose-elias-alvarez/typescript.nvim",
     },
-    config = function()
-      require("user.lsp")
-    end,
+    config = function() require("user.lsp") end,
   },
 
   -- Autocompletion

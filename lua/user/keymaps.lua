@@ -13,6 +13,9 @@ keymap('n', 'ä', ']')
 keymap('n', 'å', '[')
 keymap('n', 'äd', ']d')
 keymap('n', 'åd', '[d')
+keymap('i', '<Tab>', function()
+  return vim.fn.pumvisible() == 1 and '<C-n>' or '<Tab>'
+end, { expr = true })
 
 -- LSP diagnostics maps
 keymap('n', '<C-ä>', function() vim.diagnostic.jump({count = 1, }) end)
