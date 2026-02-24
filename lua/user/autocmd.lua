@@ -39,3 +39,15 @@ au("FileType", {
     end
   end
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "qf",
+  callback = function()
+    vim.keymap.set("n", "o", function()
+      local qf_win = vim.api.nvim_get_current_win()
+      local ln = vim.api.nvim_win_get_cursor(0)[1]
+      vim.cmd(ln .. "cc")
+      vim.api.nvim_set_current_win(qf_win)
+    end, { buffer = true, silent = true })
+  end,
+})
