@@ -1,5 +1,6 @@
+local colorscheme = 'noirblaze'
 -- use your colorscheme first:
-vim.cmd("colorscheme kanagawa-wave")
+vim.cmd("colorscheme " .. colorscheme)
 vim.opt.termguicolors = true
 
 require('kanagawa').setup({
@@ -39,5 +40,5 @@ end
 -- sometimes remove background of bufferline/plugins
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
-
+vim.api.nvim_set_hl(0, "@lsp.type.parameter", { link = "Hlargs" })
 

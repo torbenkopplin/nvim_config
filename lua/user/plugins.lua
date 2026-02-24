@@ -20,6 +20,7 @@ return {
     "rebelot/kanagawa.nvim",
     lazy = false,
   },
+  { "n1ghtmare/noirblaze-vim", lazy = false },
 
   -- Treesitter for better syntax highlighting
   {
@@ -50,7 +51,7 @@ return {
       },
     },
     config = function(_, opts)
-      require("nvim-treesitter.config").setup(opts)
+      require("nvim-treesitter.configs").setup(opts)
     end,
   },
   {
@@ -222,7 +223,10 @@ return {
       end)
 
       vim.g.rainbow_delimiters = { highlight = highlight }
-      require("ibl").setup { scope = { highlight = highlight, char = Comment } }
+      require("ibl").setup {
+        indent = { highlight = { "Comment" } },
+        scope = { highlight = highlight, }
+      }
 
       hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
     end
