@@ -25,6 +25,7 @@ keymap('n', '<leader>e', function() vim.diagnostic.open_float() end)
 
 keymap('n', '<leader>r', vim.lsp.buf.references)
 keymap('n', '<leader>d', vim.lsp.buf.definition)
+keymap('n', '<leader>s', vim.lsp.buf.rename)
 
 keymap('n', '`', "'")
 keymap('n', "'", '`')
