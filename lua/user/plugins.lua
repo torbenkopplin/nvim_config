@@ -50,7 +50,16 @@ return {
         },
       },
     },
-    config = function(_, opts) require("nvim-treesitter").setup(opts) end,
+    config = function(_, opts)
+      local ok, configs = pcall(require, "nvim-treesitter.configs")
+      if not ok then
+        ok, configs = pcall(require, "nvim-treesitter.config")
+      end
+
+      if ok then
+        configs.setup(opts)
+      end 
+    end,
   },
   {
     "m-demare/hlargs.nvim",
