@@ -20,7 +20,25 @@ return {
     "rebelot/kanagawa.nvim",
     lazy = false,
   },
-  { "n1ghtmare/noirblaze-vim", lazy = false },
+  {
+    "n1ghtmare/noirblaze-vim",
+    lazy = false
+  },
+  {
+    "jesseleite/noirbuddy.nvim",
+    dependencies = {
+      { "tjdevries/colorbuddy.nvim" }
+    },
+    lazy = false,
+    priority = 1000,
+    opts = {
+      preset = 'minimal',
+      styles = {
+        italic = true,
+        bold = true,
+      }
+    },
+  },
 
   -- Treesitter for better syntax highlighting
   {
@@ -215,16 +233,17 @@ return {
         "RainbowDelimiterCyan",
       }
       local hooks = require "ibl.hooks"
+      local colors = require 'noirbuddy.colors'.all()
       -- create the highlight groups in the highlight setup hook, so they are reset
       -- every time the colorscheme changes
       hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-        vim.api.nvim_set_hl(0, "RainbowDelimiterRed", { fg = "#E06C75" })
-        vim.api.nvim_set_hl(0, "RainbowDelimiterYellow", { fg = "#E5C07B" })
-        vim.api.nvim_set_hl(0, "RainbowDelimiterBlue", { fg = "#61AFEF" })
-        vim.api.nvim_set_hl(0, "RainbowDelimiterOrange", { fg = "#D19A66" })
-        vim.api.nvim_set_hl(0, "RainbowDelimiterGreen", { fg = "#98C379" })
-        vim.api.nvim_set_hl(0, "RainbowDelimiterViolet", { fg = "#C678DD" })
-        vim.api.nvim_set_hl(0, "RainbowDelimiterCyan", { fg = "#56B6C2" })
+        vim.api.nvim_set_hl(0, "RainbowDelimiterRed", { fg = colors.noir_0 })
+        vim.api.nvim_set_hl(0, "RainbowDelimiterYellow", { fg = colors.noir_1 })
+        vim.api.nvim_set_hl(0, "RainbowDelimiterBlue", { fg = colors.noir_2 })
+        vim.api.nvim_set_hl(0, "RainbowDelimiterOrange", { fg = colors.noir_3 })
+        vim.api.nvim_set_hl(0, "RainbowDelimiterGreen", { fg = colors.noir_4 })
+        vim.api.nvim_set_hl(0, "RainbowDelimiterViolet", { fg = colors.noir_5 })
+        vim.api.nvim_set_hl(0, "RainbowDelimiterCyan", { fg = colors.noir_6 })
       end)
 
       vim.g.rainbow_delimiters = { highlight = highlight }
@@ -254,4 +273,38 @@ return {
     },
     config = function(_, opts) require("outline").setup(opts) end,
   },
+
+  {
+    "Root-lee/screensaver.nvim",
+    opts = {
+      idle_ms = 5 * 60 * 1000,  -- Start after 5 minute of inactivity
+      auto_start = true, -- Start after idle time
+      custom_commands = {
+        aquarium = "asciiquarium -t",      -- ASCII aquarium
+        cmatrix = "cmatrix -s",            -- Matrix rain
+        -- nyancat = "nyancat",               -- Rainbow cat
+        -- aafire = "while true; do aafire; done",  -- Fire loop
+        -- sl = "while true; do sl -aF; done",      -- Steam train
+      },
+      animations = {
+        -- "cmatrix",
+        -- "aquarium",
+        "rain",
+        "game_of_life",
+        -- "move_left",
+        -- "move_right",
+        "scramble",
+        -- "random_case",
+        "bounce",
+        "starfield",
+        "pipes",
+        "fire",
+        "snow",
+        "zoo",
+      },
+    },
+    config = function(_, opts)
+      require("screensaver").setup(opts)
+    end,
+  }
 }

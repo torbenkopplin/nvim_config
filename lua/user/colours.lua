@@ -1,9 +1,10 @@
 local colorscheme = 'noirblaze'
+local noirbuddy_lualine = require("noirbuddy.plugins.lualine")
 -- use your colorscheme first:
 vim.cmd("colorscheme " .. colorscheme)
 vim.opt.termguicolors = true
 
-require('kanagawa').setup({
+require('ayu').setup({
   mirage = false,
   terminal = true,
   overrides = {
@@ -19,11 +20,19 @@ require('kanagawa').setup({
   },
 })
 
-require('lualine').setup({
+
+require('lualine').setup {
   options = {
-    theme = 'ayu',
+    theme = noirbuddy_lualine.theme,
   },
-})
+  sections = noirbuddy_lualine.sections,
+  inactive_sections = noirbuddy_lualine.inactive_sections,
+}
+-- require('lualine').setup({
+--   options = {
+--     theme = 'ayu',
+--   },
+-- })
 
 -- make background transparent
 local groups = {

@@ -74,3 +74,24 @@ for i=0,25 do
   vim.keymap.set("n", "'"..low(i), "'"..upp(i))
   vim.keymap.set("n", "'"..upp(i), "'"..low(i))
 end
+
+vim.api.nvim_create_user_command("Aqua", function(args)
+  require('screensaver').start('aquarium')
+end, {
+  nargs = '?',
+  desc = 'Screensaver (Aquarium)',
+})
+
+vim.api.nvim_create_user_command("Star", function(args)
+  require('screensaver').start('starfield')
+end, {
+  nargs = '?',
+  desc = 'Screensaver (startfield)',
+})
+
+vim.api.nvim_create_user_command("Matrix", function(args)
+  require('screensaver').start('cmatrix')
+end, {
+  nargs = '?',
+  desc = 'Screensaver (startfield)',
+})
